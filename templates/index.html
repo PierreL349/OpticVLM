@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optic</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const dropArea = document.getElementById("dropArea");
+            const fileInput = document.getElementById("imageInput");
+            const preview = document.getElementById("imagePreview");
+            const imageContainer = document.getElementById("imageContainer");
+            const removeButton = document.getElementById("removeImage");
+            const form = document.getElementById("queryForm");
+            const responseDiv = document.getElementById("response");
+
+            function handleDragOver(event) {
+                event.preventDefault();
+                dropArea.classList.add("drag-over");
+            }
+
+            function handleDragLeave(event) {
+                event.preventDefault();
+                dropArea.classList.remove("drag-over");
+            }
+
+            function handleDrop(event) {
+                event.preventDefault();
+                dropArea.classList.remove("drag-over");
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    displayImage(files[0]);
+                }
+            }
+
+            function handleFileChange(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    displayImage(file);
+                }
+            }
+
+            function displayImage(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                    imageContainer.classList.add("visible");
+                    removeButton.classList.add("visible");
+                    dropArea.classList.add("hidden");
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function removeImage() {
+                preview.src = "";
+                preview.style.display = "none";
+                imageContainer.classList.remove("visible");
+                removeButton.classList.remove("visible");
+                dropArea.classList.remove("hidden");
+                fileInput.value = ""; // Reset input
+            }
+
+            async function handleFormSubmit(event) {
+                event.preventDefault(); // Prevent page reload
+                const formData = new FormData(form);
+
+                // Clear any existing response
+                responseDiv.innerHTML = "Processing...";
+
+                try {
+                    const response = await fetch("/ask", {
+                        method: "POST",
+                        body: formData,
+                    });
+                    const result = await response.json();
+                    responseDiv.innerHTML = `Answer: ${result.answer}`;
+                } catch (error) {
+                    responseDiv.innerHTML = "An error occurred. Please try again.";
+                    console.error("Error:", error);
+                }
+            }
+
+            dropArea.addEventListener("dragover", handleDragOver);
+            dropArea.addEventListener("dragleave", handleDragLeave);
+            dropArea.addEventListener("drop", handleDrop);
+            fileInput.addEventListener("change", handleFileChange);
+            removeButton.addEventListener("click", removeImage);
+            form.addEventListener("submit", handleFormSubmit); // Attach event handler for form submission
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1></h1>
+        <form id="queryForm">
+            <div id="dropArea">
+                <p>Drag & Drop an image here, or click to upload</p>
+                <input id="imageInput" type="file" name="image" accept="image/*">
+            </div>
+            <div id="imageContainer">
+                <img id="imagePreview" alt="Image Preview">
+                <button type="button" id="removeImage">X</button>
+            </div>
+            <input type="text" name="question" placeholder="Ask about the image" required>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="response"></div>
+    </div>
+</body>
+</html>

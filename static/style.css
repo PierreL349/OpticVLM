@@ -1,0 +1,142 @@
+/* Reset all styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+h1 {
+    margin-bottom: 10px;
+    font-size: 36px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Consistent spacing between form elements */
+    align-items: center;
+}
+
+#dropArea {
+    border: 2px dashed white;
+    border-radius: 10px;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: border-color 0.3s;
+}
+
+#dropArea.hidden {
+    display: none; /* Fully hides the drop area when toggled */
+}
+
+#dropArea.drag-over {
+    border-color: gray;
+}
+
+#dropArea p {
+    margin: 0;
+    font-size: 16px;
+}
+
+#dropArea input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#imageContainer {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+#imageContainer.visible {
+    display: flex; /* Only shows when toggled */
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 100%;
+    display: none;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+#removeImage {
+    position: absolute;
+    top: 5px; /* Adjust for flush alignment */
+    right: 5px; /* Adjust for flush alignment */
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex; /* Use flexbox for perfect centering */
+    justify-content: center;
+    align-items: center;
+    font-size: 16px; /* Font size tuned for "X" */
+    cursor: pointer;
+}
+
+#removeImage:hover {
+    background-color: darkred;
+}
+
+input[type="text"], button {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: gray;
+}
+
+#response {
+    margin-top: 10px;
+    font-size: 18px;
+}
